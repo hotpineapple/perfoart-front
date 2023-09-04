@@ -73,7 +73,7 @@ const ExhibitionList = () => {
     }, [currentPage]);
 
     const fetchTotalPages = async () => {
-        if(keyword !== '' || !regexp.test(keyword)) {
+        if(!regexp.test(keyword)) {
             window.alert("한글과 영문 대소문자, 공백만 입력가능합니다.");
             return;
         }
@@ -142,7 +142,7 @@ const ExhibitionList = () => {
     };
 
     const fetchExhibitionData = async () => {
-        if(keyword !== '' && !regexp.test(keyword)) {
+        if(!regexp.test(keyword)) {
             window.alert("한글과 영문 대소문자, 공백만 입력가능합니다.");
             return;
         }
