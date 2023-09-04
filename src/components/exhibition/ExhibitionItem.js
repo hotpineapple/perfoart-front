@@ -55,7 +55,7 @@ const ExhibitionItem = ({ exhibition }) => {
             </div>
             <div className='non-imgBox'>
                 <div className='titleBox'>
-                    <Link to={`/exhibition/${newExhibition.seq}`} state = {{ exhibition: newExhibition }} style={{ color: "black" }}>
+                    <Link to={`/exhibition/${newExhibition.seq}`} state = {{ exhibition: newExhibition }} onClick={handleGotoDetail} style={{ color: "black" }}>
                         {newExhibition.title}
                     </Link>
                 </div>

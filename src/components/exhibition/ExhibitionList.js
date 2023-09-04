@@ -35,48 +35,36 @@ const ExhibitionList = () => {
     const [overwrite, setOverwrite] = useState(true);
     
     const token = localStorage.getItem('access_token')
-
+    
     useEffect(() => {
-        // console.log('first loaded')
         fetchTotalArea();
         fetchTotalRealm();
         fetchHotExhibitions();
     }, []);
     
     useEffect(() => {
-        // console.log('selectedArea changes')
+        fetchTotalPlace();
         if(isHistory) return;
         setSelectedPlace('all-place');
-        fetchTotalPlace();
     }, [selectedArea]);
 
     useEffect(() => {
-        // console.log('arrive bottom')
         if(inView && currentPage < totalPages) {
             setOverwrite(false)
             setCurrentPage(currentPage + 1);
-            // fetchExhibitionData();
         }
     }, [inView])
 
     useEffect(() => {
-        // console.log('others changes')
         fetchTotalPages();
         setOverwrite(true)
         // 1. 이전 필터 기록을 가져오는 경우에는 아래 코드를 수행하지 않음 (즉, 페이지값을 그대로 가져옴)
-        if(isHistory) {
-            // setIsHistory(false);
-            return; 
-        }
+        if(isHistory) return; 
 
         // 2. 그렇지 않은 경우에는 필터조건이 바뀌면 1페이지부터 시작함
-        if (currentPage === 1) {
-            fetchExhibitionData();
-        }
-        else {
-            setCurrentPage(1);
-            // fetchExhibitionData(true);
-        }
+        if (currentPage === 1) fetchExhibitionData();
+        else setCurrentPage(1);
+        
     }, [selectedArea, selectedPlace, selectedRealm, isFreeChecked, exceptExpiredChecked, keyword, selectedSort]);
 
     useEffect(() => {
@@ -85,7 +73,7 @@ const ExhibitionList = () => {
     }, [currentPage]);
 
     const fetchTotalPages = async () => {
-        if(keyword !== '' && !regexp.test(keyword)) {
+        if(keyword !== '' || !regexp.test(keyword)) {
             window.alert("한글과 영문 대소문자, 공백만 입력가능합니다.");
             return;
         }
@@ -185,9 +173,10 @@ const ExhibitionList = () => {
                 setExhibitionData(newData);
 
                 setTimeout(() => {
+                    // console.log('scrollY:',scrollY)
                     window.scrollTo(0, scrollY);
                     setScrollY(0)
-                },100);
+                }, 100);
             } else {
                 // console.log('infinite scroll')
                 setExhibitionData([...exhibitionData, ...newData])
@@ -222,7 +211,7 @@ const ExhibitionList = () => {
         if (!token) {
             if (window.confirm('로그인이 필요합니다. 로그인 페이지로 이동하시겠습니까?') === true) window.location.href = "/login";
         } else {
-            if(keyword !== '' && !regexp.test(keyword)) {
+            if(keyword !== '' || !regexp.test(keyword)) {
                 window.alert("한글과 영문 대소문자, 공백만 입력가능합니다.");
             }
 
@@ -248,7 +237,13 @@ const ExhibitionList = () => {
         <Tooltip id="button-tooltip" {...props}>
             원하는 키워드가 포함된 전시가 업데이트 되면 메일로 알려드려요
         </Tooltip>
-      );
+    );
+
+    const handleGotoDetail = () => {
+        setIsHistory(true);
+        // console.log(window.scrollY)
+        setScrollY(window.scrollY);
+    }
 
     return (
         <div>
@@ -292,7 +287,7 @@ const ExhibitionList = () => {
                         <div>
                             <div>장소</div>
                             <Form.Select onChange={(e) => setSelectedPlace(e.target.value)} onClick={handleClickPlace} value={selectedPlace}>
-                                <option value="all-place" >전체 장소</option>
+                                <option value="all-place">전체 장소</option>
                                 {totalPlace.map(place => (<option key={place}>{place}</option>))}
                             </Form.Select >
                         </div>
@@ -321,7 +316,7 @@ const ExhibitionList = () => {
                             <div key={ex.seq} style={{ overflow:"hidden", textOverflow:"ellipsis", whiteSpace: "nowrap", marginBottom: "2px" }}>
                                 <span>{idx+1}.</span>
                                 {" "}
-                                <Link to={`/exhibition/${ex.seq}`} state = {{ exhibition: ex }} style={{ color: "black" }}>
+                                <Link to={`/exhibition/${ex.seq}`} state = {{ exhibition: ex }} onClick={handleGotoDetail} style={{ color: "black" }}>
                                     {ex.title}
                                 </Link>        
                             </div>
