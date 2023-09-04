@@ -89,8 +89,6 @@ const ExhibitionList = () => {
             window.alert("한글과 영문 대소문자, 공백만 입력가능합니다.");
             return;
         }
-
-        if(selectedPlace.includes("&")) selectedPlace.replace("&","%26");
         
         try {
             let url = `${RESTAPI_SERVER_URL}/exhibition-count?isFree=${isFreeChecked}`;
@@ -101,7 +99,7 @@ const ExhibitionList = () => {
             if (keyword !== '') url += `&keyword=${keyword}`
             if (exceptExpiredChecked) url += `&endAfter=${nowDate()}`
             // console.log(url)
-            const response = await axios.get(url);
+            const response = await axios.get(encodeURIComponent(url));
             setTotalPages(Math.ceil(response.data / exhibitionsPerPage));
         } catch (error) {
             console.error('Error fetching total pages:', error);
@@ -161,8 +159,6 @@ const ExhibitionList = () => {
             return;
         }
 
-        if(selectedPlace.includes("&")) selectedPlace.replace("&","%26");
-
         try {
             let newData = [];
             if(isHistory) {
@@ -210,7 +206,7 @@ const ExhibitionList = () => {
         if (keyword !== '') url += `&keyword=${keyword}`
         if (exceptExpiredChecked) url += `&endAfter=${nowDate()}`
 
-        return url;
+        return encodeURIComponent(url);
     }
     const nowDate = () => new Date().toISOString().slice(0, 10);
     
