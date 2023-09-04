@@ -94,12 +94,12 @@ const ExhibitionList = () => {
             let url = `${RESTAPI_SERVER_URL}/exhibition-count?isFree=${isFreeChecked}`;
 
             if (selectedArea !== 'all-area') url += `&area=${selectedArea}`;
-            if (selectedPlace !== 'all-place') url += `&place=${selectedPlace}`
+            if (selectedPlace !== 'all-place') url += `&place=${encodeURIComponent(selectedPlace)}`
             if (selectedRealm !== 'all-realm') url += `&realm=${selectedRealm}`
             if (keyword !== '') url += `&keyword=${keyword}`
             if (exceptExpiredChecked) url += `&endAfter=${nowDate()}`
-            // console.log(url)
-            const response = await axios.get(encodeURIComponent(url));
+
+            const response = await axios.get(url);
             setTotalPages(Math.ceil(response.data / exhibitionsPerPage));
         } catch (error) {
             console.error('Error fetching total pages:', error);
@@ -201,12 +201,12 @@ const ExhibitionList = () => {
         let url = `${RESTAPI_SERVER_URL}/exhibition?page=${page - 1}&size=${exhibitionsPerPage}&sortBy=${totalSort[selectedSort].sortBy}&sortOrder=${totalSort[selectedSort].sortOrder}&isFree=${isFreeChecked}`
 
         if (selectedArea !== 'all-area') url += `&area=${selectedArea}`;
-        if (selectedPlace !== 'all-place') url += `&place=${selectedPlace}`
+        if (selectedPlace !== 'all-place') url += `&place=${encodeURIComponent(selectedPlace)}`
         if (selectedRealm !== 'all-realm') url += `&realm=${selectedRealm}`
         if (keyword !== '') url += `&keyword=${keyword}`
         if (exceptExpiredChecked) url += `&endAfter=${nowDate()}`
 
-        return encodeURIComponent(url);
+        return url;
     }
     const nowDate = () => new Date().toISOString().slice(0, 10);
     
