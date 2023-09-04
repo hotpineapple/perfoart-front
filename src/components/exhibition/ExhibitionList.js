@@ -90,6 +90,8 @@ const ExhibitionList = () => {
             return;
         }
 
+        if(selectedPlace.includes("&")) selectedPlace.replace("&","%26");
+        
         try {
             let url = `${RESTAPI_SERVER_URL}/exhibition-count?isFree=${isFreeChecked}`;
 
@@ -159,6 +161,8 @@ const ExhibitionList = () => {
             return;
         }
 
+        if(selectedPlace.includes("&")) selectedPlace.replace("&","%26");
+
         try {
             let newData = [];
             if(isHistory) {
@@ -222,7 +226,9 @@ const ExhibitionList = () => {
         if (!token) {
             if (window.confirm('로그인이 필요합니다. 로그인 페이지로 이동하시겠습니까?') === true) window.location.href = "/login";
         } else {
-            if (keyword === '') window.alert("빈칸입니다");
+            if(keyword !== '' && !regexp.test(keyword)) {
+                window.alert("한글과 영문 대소문자, 공백만 입력가능합니다.");
+            }
 
             else if (window.confirm('키워드 메일 알림을 신청하시겠습니까?') === true) {
                 try {
@@ -254,7 +260,7 @@ const ExhibitionList = () => {
                 <div className="wrapper">
                     <div className="searchInput">
                         <InputGroup className="mb-3">
-                            <Form.Control type="text" placeholder="검색어를 입력하세요" onChange={(e) => setKeywordTemp(e.target.value)} onKeyPress={handleOnKeyPress} value={keywordTemp}/>
+                            <Form.Control type="text" placeholder="검색어 또는 키워드를 입력하세요" onChange={(e) => setKeywordTemp(e.target.value)} onKeyPress={handleOnKeyPress} value={keywordTemp}/>
                             <Button variant="light" id="button-addon2" onClick={() => {setKeywordTemp(''); setKeyword('');}}>
                                 X
                             </Button>
