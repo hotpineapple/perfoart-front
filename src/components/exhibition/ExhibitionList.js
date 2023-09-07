@@ -211,7 +211,7 @@ const ExhibitionList = () => {
         if (!token) {
             if (window.confirm('로그인이 필요합니다. 로그인 페이지로 이동하시겠습니까?') === true) window.location.href = "/login";
         } else {
-            if(keyword !== '' || !regexp.test(keyword)) {
+            if(keyword == '' || !regexp.test(keyword)) {
                 window.alert("한글과 영문 대소문자, 공백만 입력가능합니다.");
             }
 
