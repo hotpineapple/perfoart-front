@@ -10,6 +10,7 @@ const ExhibitionDetail = () => {
   const RESTAPI_SERVER_URL = process.env.REACT_APP_RESTAPI_SERVER_URL;
   const token = localStorage.getItem('access_token')
   const { state } = useLocation();
+  if(!state) window.location.href = '/';
   const { exhibition }  = state;
 
   const [likeCount, setLikeCount] = useState(exhibition.likeCount);
